@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
     ngOnInit() {
     }
 
-    onLogin(): void {
-        this.router.navigate(['/home']);
+    onLogin(): Promise<boolean> {
+        return this.router.navigate(['/home']);
     }
 }
