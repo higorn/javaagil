@@ -13,7 +13,11 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.router.navigate(['login']);
+    if (localStorage.getItem('authToken') === null) {
+      this.router.navigate(['login']);
+      return;
+    }
+    this.router.navigate(['home']);
   }
 
 }

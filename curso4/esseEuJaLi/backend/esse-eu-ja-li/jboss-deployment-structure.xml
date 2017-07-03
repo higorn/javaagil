@@ -1,0 +1,10 @@
+<jboss-deployment-structure
+        xmlns="urn:jboss:deployment-structure:1.3"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <deployment>
+        <dependencies>
+            <module name="org.hibernate" slot="ogm" services="export" />
+            <module name="org.hibernate.ogm.mongodb" slot="main" services="export" />
+        </dependencies>
+    </deployment>
+</jboss-deployment-structure>

@@ -10,3 +10,7 @@
 .login-field {
 	width: 100%;
 }
+
+.login-panel .title md-card-subtitle {
+    color: red;
+}

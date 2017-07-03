@@ -1,12 +1,13 @@
 <md-card class="login-panel">
 	<md-card-header class="title">
-		<md-card-title>Bem vindo</md-card-title>
+		<md-card-title>Login</md-card-title>
+		<md-card-subtitle id="loginMessage">{{message}}</md-card-subtitle>
 	</md-card-header>
 	<md-card-content>
-		<form>
+		<form [formGroup]="loginForm" (ngSubmit)="onLogin()">
 			<div class="row">
 				<md-input-container class="login-field">
-					<input mdInput type="text" >
+					<input id="inputUser" mdInput formControlName="name" type="text" >
 					<md-placeholder>
 						<i class="fa fa-user"></i>
 						<span>Usuário</span>
@@ -15,7 +16,7 @@
 			</div>
 			<div class="row">
 				<md-input-container class="login-field">
-					<input mdInput type="password" >
+					<input id="inputPassword" mdInput formControlName="password" type="password" >
 					<md-placeholder >
 						<i class="fa fa-key"></i>
 						<span>Senha</span>

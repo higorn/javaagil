@@ -1,14 +1,25 @@
 import { EsseEuJaLiUIPage } from './app.po';
 
-describe('esse-eu-ja-li-ui App', () => {
+describe('For name nicanor', () => {
   let page: EsseEuJaLiUIPage;
 
   beforeEach(() => {
     page = new EsseEuJaLiUIPage();
   });
 
-  it('should display welcome message', () => {
+  it('should login', () => {
+    page.navigateTo();
+    expect(page.getLoginTitle()).toEqual('Login');
+    page.getLoginUserInput().sendKeys('nicanor');
+    page.getLoginPasswordInput().sendKeys('abc');
+    page.getLoginButton().click();
+    expect(page.getParagraphText()).toEqual('Welcome to app!!');
+  })
+
+  it('should logout', () => {
     page.navigateTo();
     expect(page.getParagraphText()).toEqual('Welcome to app!!');
+    page.getLogoutButton().click();
+    expect(page.getLoginTitle()).toEqual('Login');
   });
 });
