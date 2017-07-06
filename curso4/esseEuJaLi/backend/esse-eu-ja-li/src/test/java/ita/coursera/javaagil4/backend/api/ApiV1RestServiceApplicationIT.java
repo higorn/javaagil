@@ -7,6 +7,7 @@ import org.bson.Document;
 import org.jboss.resteasy.plugins.server.undertow.UndertowJaxrsServer;
 import org.jboss.resteasy.test.TestPortProvider;
 import org.jboss.resteasy.util.Base64;
+import org.jboss.resteasy.util.PortProvider;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -35,6 +36,7 @@ public class ApiV1RestServiceApplicationIT {
 
 	@BeforeClass
 	public static void beforeClass() throws NamingException {
+		System.setProperty("org.jboss.resteasy.port", "8082");
 		server = new UndertowJaxrsServer().start();
 	}
 
