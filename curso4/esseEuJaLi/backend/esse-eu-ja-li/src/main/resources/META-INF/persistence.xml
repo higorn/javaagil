@@ -8,8 +8,9 @@
     <persistence-unit name="esseEuJaLiPU" transaction-type="JTA">
         <!-- Use the Hibernate OGM provider: configuration will be transparent -->
         <provider>org.hibernate.ogm.jpa.HibernateOgmPersistence</provider>
-        <class>ita.coursera.javaagil4.backend.api.model.Account</class>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
+            <property name="hibernate.archive.autodetection" value="class, hbm"/>
 			<property name="hibernate.ogm.datastore.database" value="esseEuJaLi" />
 			<property name="hibernate.ogm.datastore.host" value="localhost" />
 			<property name="hibernate.ogm.datastore.provider" value="MONGODB" />
