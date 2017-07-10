@@ -11,6 +11,7 @@ import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.TransactionManager;
 
 /**
  * @author higor
@@ -26,5 +27,10 @@ public class EntityManagerProvider {
     @DataSourceQualifier
     public EntityManager getEntityManager() {
         return this.entityManager;
+    }
+
+    @Produces
+    public TransactionManager getTransactionManager() {
+        return com.arjuna.ats.jta.TransactionManager.transactionManager();
     }
 }

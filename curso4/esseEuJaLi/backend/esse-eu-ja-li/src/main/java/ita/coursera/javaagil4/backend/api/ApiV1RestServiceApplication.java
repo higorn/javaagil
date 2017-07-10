@@ -1,5 +1,7 @@
 package ita.coursera.javaagil4.backend.api;
 
+import ita.coursera.javaagil4.backend.api.rest.AccountRestService;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.ws.rs.ApplicationPath;

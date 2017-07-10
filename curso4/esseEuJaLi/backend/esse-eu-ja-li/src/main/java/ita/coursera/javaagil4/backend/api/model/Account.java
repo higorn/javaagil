@@ -5,6 +5,7 @@
  */
 package ita.coursera.javaagil4.backend.api.model;
 
+import com.fasterxml.jackson.annotation.JsonRootName;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Column;
@@ -14,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -29,9 +31,11 @@ public class Account implements Serializable {
     @Column(nullable = false)
     private String id;
     @OrderColumn
+    @NotNull
     private String name;
     private String displayName;
     private String role;
+    @NotNull
     private String password;
     private String token;
 
@@ -40,6 +44,14 @@ public class Account implements Serializable {
 
     public Account(String id) {
         this.id = id;
+    }
+
+    public Account(String name, String displayName, String role, String password, String token) {
+        this.name = name;
+        this.displayName = displayName;
+        this.role = role;
+        this.password = password;
+        this.token = token;
     }
 
     public String getId() {

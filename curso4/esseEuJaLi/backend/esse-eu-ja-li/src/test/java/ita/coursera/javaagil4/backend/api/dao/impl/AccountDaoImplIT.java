@@ -1,6 +1,5 @@
 package ita.coursera.javaagil4.backend.api.dao.impl;
 
-import com.arjuna.ats.jta.TransactionManager;
 import ita.coursera.javaagil4.backend.api.WeldJUnit4Runner;
 import ita.coursera.javaagil4.backend.api.model.Account;
 import org.junit.After;
@@ -32,7 +31,6 @@ import static org.junit.Assert.assertNull;
 @RunWith(WeldJUnit4Runner.class)
 public class AccountDaoImplIT {
 
-    private javax.transaction.TransactionManager tm;
     @Inject
     private AccountDaoImpl dao;
     private Account account;
@@ -40,11 +38,7 @@ public class AccountDaoImplIT {
     @Before
     public void setUp() throws NotSupportedException, SystemException {
         MockitoAnnotations.initMocks(this);
-        tm = TransactionManager.transactionManager();
-        if (tm.getStatus() == javax.transaction.Status.STATUS_NO_TRANSACTION) {
-			tm.begin();
-        }
-        
+
         account = new Account();
         account.setName("nicanor");
         account.setDisplayName("Nicanor");
@@ -57,7 +51,6 @@ public class AccountDaoImplIT {
     public void tearDown() throws SecurityException, IllegalStateException,
     	RollbackException, HeuristicMixedException, HeuristicRollbackException, SystemException {
         dao.remove(account);
-    	tm.commit();
     }
 
     @Test
@@ -70,5 +63,29 @@ public class AccountDaoImplIT {
         assertEquals("user", account.getRole());
         assertEquals("abc", account.getPassword());
         assertNull(account.getToken());
+    }
+
+    @Test
+    public void deveEncontrarContaPeloId() {
+        Account account = dao.findById(this.account.getId());
+        assertNotNull(account);
+        assertEquals(this.account.getId(), account.getId());
+    }
+
+    @Test
+    public void deveAtualizarUmaConta() {
+        Account account = dao.findByName("nicanor");
+        assertNotNull(account);
+        assertNotNull(account.getId());
+        assertEquals("nicanor", account.getName());
+        assertEquals("Nicanor", account.getDisplayName());
+        assertEquals("user", account.getRole());
+        assertEquals("abc", account.getPassword());
+        assertNull(account.getToken());
+
+        account.setPassword("def");
+        Account accountUpdated = dao.update(account);
+        assertNotNull(accountUpdated);
+        assertEquals(account.getPassword(), accountUpdated.getPassword());
     }
 }

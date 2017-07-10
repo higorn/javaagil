@@ -7,7 +7,9 @@ package ita.coursera.javaagil4.backend.api.dao;/*
 import ita.coursera.javaagil4.backend.api.model.Account;
 
 public interface AccountDao {
+    Account findById(String id);
     Account findByName(String name);
-    void create(Account account);
+    Account create(Account account);
     void remove(Account account);
+    Account update(Account account);
 }
