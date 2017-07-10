@@ -2,7 +2,10 @@ package ita.coursera.javaagil4.backend.api.dao.impl;
 
 import ita.coursera.javaagil4.backend.api.WeldJUnit4Runner;
 import ita.coursera.javaagil4.backend.api.model.Account;
+import ita.coursera.javaagil4.backend.api.security.HashUtils;
+
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,8 +19,13 @@ import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
 /*
  * File:   AccountDaoImplTest.java
@@ -34,16 +42,19 @@ public class AccountDaoImplIT {
     @Inject
     private AccountDaoImpl dao;
     private Account account;
+	private String token;
 
     @Before
-    public void setUp() throws NotSupportedException, SystemException {
+    public void setUp() throws NotSupportedException, SystemException, NoSuchAlgorithmException {
         MockitoAnnotations.initMocks(this);
 
+        token = HashUtils.generateToken();
         account = new Account();
         account.setName("nicanor");
         account.setDisplayName("Nicanor");
         account.setRole("user");
         account.setPassword("abc");
+        account.setToken(token);
         dao.create(account);
     }
     
@@ -62,7 +73,7 @@ public class AccountDaoImplIT {
         assertEquals("Nicanor", account.getDisplayName());
         assertEquals("user", account.getRole());
         assertEquals("abc", account.getPassword());
-        assertNull(account.getToken());
+        assertEquals(this.account.getToken(), account.getToken());
     }
 
     @Test
@@ -70,6 +81,20 @@ public class AccountDaoImplIT {
         Account account = dao.findById(this.account.getId());
         assertNotNull(account);
         assertEquals(this.account.getId(), account.getId());
+    }
+
+    @Test
+    public void deveEncontrarContaPeloToken() {
+        Optional<Account> maybeAccount = dao.findByToken(token);
+        assertTrue(maybeAccount.isPresent());
+        assertEquals(this.account.getId(), maybeAccount.get().getId());
+        assertEquals(this.account.getToken(), maybeAccount.get().getToken());
+    }
+
+    @Test
+    public void quandoTokenNaoEncontradoDeveRetornarContaVazia() {
+        Optional<Account> maybeAccount = dao.findByToken("invalido");
+        assertFalse(maybeAccount.isPresent());
     }
 
     @Test
@@ -81,7 +106,7 @@ public class AccountDaoImplIT {
         assertEquals("Nicanor", account.getDisplayName());
         assertEquals("user", account.getRole());
         assertEquals("abc", account.getPassword());
-        assertNull(account.getToken());
+        assertEquals(this.account.getToken(), account.getToken());
 
         account.setPassword("def");
         Account accountUpdated = dao.update(account);

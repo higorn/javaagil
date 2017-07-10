@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
@@ -24,14 +25,17 @@ import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -64,7 +68,7 @@ public class SecurityInterceptorTest {
         assertNotNull(response);
         assertEquals(400, response.getStatus());
         assertTrue(response.getEntity() instanceof ApiResponse);
-        ApiResponse apiResponse = (ApiResponse) response.getEntity();
+        ApiResponse<String> apiResponse = (ApiResponse<String>) response.getEntity();
         assertEquals(Integer.valueOf(400), apiResponse.getCode());
         assertEquals("Bad Request", apiResponse.getStatus());
         assertEquals(":(", apiResponse.getData());
@@ -80,9 +84,9 @@ public class SecurityInterceptorTest {
     }
 
     @Test
-    public void paraRequisicaoComAutorizacaoInvalidaDeveRetornarErro() throws IOException, NoSuchMethodException {
-        String basicAuthEncoded = Base64.encodeBytes("lauterio:123".getBytes());
-        String authorization = "Basic " + basicAuthEncoded;
+    public void paraRequisicaoComAutorizacaoInvalidaDeveRetornarErro() throws IOException, NoSuchMethodException, NoSuchAlgorithmException {
+        String token = HashUtils.generateToken();
+        String authorization = "Basic " + token + "abc";
 
         MultivaluedHashMap<String, String> headers = new MultivaluedHashMap<>();
         headers.put("Authorization", new ArrayList<>(Arrays.asList(new String[]{authorization})));
@@ -93,20 +97,46 @@ public class SecurityInterceptorTest {
         Account accountExpected = new Account();
         accountExpected.setName("lauterio");
         accountExpected.setDisplayName("Lauterio");
-        accountExpected.setPassword(HashUtils.hashPassword(accountExpected.getName(), "cba"));
+        accountExpected.setToken(token);
 
-        when(accountDao.findByName("lauterio")).thenReturn(accountExpected);
+        when(accountDao.findByToken(token)).thenReturn(Optional.of(accountExpected));
 
         interceptor.filter(requestContext);
+        verify(accountDao).findByToken(token + "abc");
         Response response = requestContext.getResponseAbortedWith();
         assertNotNull(response);
         assertEquals(401, response.getStatus());
         assertTrue(response.getEntity() instanceof ApiResponse);
-        ApiResponse apiResponse = (ApiResponse) response.getEntity();
+        ApiResponse<String> apiResponse = (ApiResponse<String>) response.getEntity();
         assertEquals(Integer.valueOf(401), apiResponse.getCode());
         assertEquals("Unauthorized", apiResponse.getStatus());
         assertEquals(":(", apiResponse.getData());
     }
+
+    @Test
+    public void devePermitirRequisicaoComAutorizacaoValida() throws IOException, NoSuchMethodException, NoSuchAlgorithmException {
+        String token = HashUtils.generateToken();
+        String authorization = "Basic " + token;
+
+        MultivaluedHashMap<String, String> headers = new MultivaluedHashMap<>();
+        headers.put("Authorization", new ArrayList<>(Arrays.asList(new String[]{authorization})));
+
+        when(requestContext.getHeaders()).thenReturn(headers);
+        when(methodInvoker.getMethod()).thenReturn(AccountRestService.class.getDeclaredMethod("getAccount", String.class));
+
+        Account accountExpected = new Account();
+        accountExpected.setName("lauterio");
+        accountExpected.setDisplayName("Lauterio");
+        accountExpected.setToken(token);
+
+        when(accountDao.findByToken(token)).thenReturn(Optional.of(accountExpected));
+
+        interceptor.filter(requestContext);
+        verify(accountDao).findByToken(token);
+        Response response = requestContext.getResponseAbortedWith();
+        assertNull(response);
+    }
+
     static class ContainerRequestContextMock extends PostMatchContainerRequestContext {
 
         public ContainerRequestContextMock(HttpRequest request, ResourceMethodInvoker resourceMethod) {

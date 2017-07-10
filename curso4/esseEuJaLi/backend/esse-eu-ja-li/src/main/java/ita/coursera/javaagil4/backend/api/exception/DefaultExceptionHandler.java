@@ -36,7 +36,7 @@ public class DefaultExceptionHandler implements ExceptionMapper<Exception> {
         }
         logger.log(Level.SEVERE, exception.getMessage(), exception);
         return Response.status(status).
-                entity(new ApiResponse(status.getStatusCode(), status.toString(), message))
+                entity(new ApiResponse<>(status.getStatusCode(), status.toString(), message))
                 .type(MediaType.APPLICATION_JSON)
                 .build();
     }

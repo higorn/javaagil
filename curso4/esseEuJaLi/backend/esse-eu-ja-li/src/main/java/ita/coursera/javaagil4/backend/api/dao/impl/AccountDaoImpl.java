@@ -9,8 +9,11 @@ import ita.coursera.javaagil4.backend.api.dao.AccountDao;
 import ita.coursera.javaagil4.backend.api.model.Account;
 import ita.coursera.javaagil4.backend.api.persistence.DataSourceQualifier;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.transaction.TransactionManager;
 import javax.ws.rs.WebApplicationException;
@@ -35,6 +38,17 @@ public class AccountDaoImpl implements AccountDao {
         query.setParameter("name", name);
         return query.getSingleResult();
     }
+
+	@Override
+	public Optional<Account> findByToken(String token) {
+        final TypedQuery<Account> query = em.createQuery("SELECT a FROM Account a WHERE a.token= :token", Account.class);
+        query.setParameter("token", token);
+        try {
+			return Optional.of(query.getSingleResult());
+        } catch (NoResultException e) {
+        	return Optional.empty();
+		}
+	}
 
 	public Account create(Account account) {
         try {

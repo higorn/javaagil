@@ -5,8 +5,7 @@
  */
 package ita.coursera.javaagil4.backend.api.model;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
-import org.hibernate.annotations.GenericGenerator;
+import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +15,8 @@ import javax.persistence.Index;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * @author higor

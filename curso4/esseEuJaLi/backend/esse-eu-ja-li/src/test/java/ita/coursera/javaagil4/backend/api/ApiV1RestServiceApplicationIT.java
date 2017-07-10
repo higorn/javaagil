@@ -43,8 +43,6 @@ public class ApiV1RestServiceApplicationIT {
     @Inject
 	private ApiV1RestServiceApplication application;
     @Inject
-	private DefaultExceptionHandler exceptionMapper;
-    @Inject
 	private SecurityInterceptor interceptor;
     @Inject
 	private DefaultExceptionHandler exceptionHandler;

@@ -67,7 +67,7 @@ public class AccountRestService {
 
         Response.Status status = Response.Status.CREATED;
 	    Response response = Response.status(status)
-                .entity(new ApiResponse(status.getStatusCode(), status.toString(), "OK"))
+                .entity(new ApiResponse<>(status.getStatusCode(), status.toString(), "OK"))
                 .type(MediaType.APPLICATION_JSON)
                 .build();
         return response;

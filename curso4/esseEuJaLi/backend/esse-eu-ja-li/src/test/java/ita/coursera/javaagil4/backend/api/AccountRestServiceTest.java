@@ -88,7 +88,7 @@ public class AccountRestServiceTest {
 		assertNotNull(response);
 		assertEquals(201, response.getStatus());
 		assertTrue(response.getEntity() instanceof ApiResponse);
-		ApiResponse apiResponse = (ApiResponse) response.getEntity();
+		ApiResponse<String> apiResponse = (ApiResponse<String>) response.getEntity();
 		assertEquals(Integer.valueOf(201), apiResponse.getCode());
 		assertEquals("Created", apiResponse.getStatus());
 		assertEquals("OK", apiResponse.getData());

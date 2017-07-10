@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -75,18 +76,26 @@ public class SecurityInterceptor implements ContainerRequestFilter {
     }
 
     private boolean isAuthenticated(List<String> authorization) {
-        final String encodedAuthorization = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
-        final String decodedAuthorization = new String(Base64.getDecoder().decode(encodedAuthorization));
-        final String[] authInfo = decodedAuthorization.split(":");
-        final String username = authInfo[0];
-        final String password = authInfo[1];
+        final String token = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
 
-        Account account = accountDao.findByName(username);
-
-        if (account.getPassword().equals(HashUtils.hashPassword(username, password))) {
-            return true;
+        Optional<Account> maybeAccount = accountDao.findByToken(token);
+        if (maybeAccount.isPresent()) {
+        	return true;
         }
         return false;
+
+//        final String encodedAuthorization = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
+//        final String decodedAuthorization = new String(Base64.getDecoder().decode(encodedAuthorization));
+//        final String[] authInfo = decodedAuthorization.split(":");
+//        final String username = authInfo[0];
+//        final String password = authInfo[1];
+//
+//        Account account = accountDao.findByName(username);
+//
+//        if (account.getPassword().equals(HashUtils.hashPassword(username, password))) {
+//            return true;
+//        }
+//        return false;
     }
 
     private <T> Response buildResponse(Response.Status status, T data) {
