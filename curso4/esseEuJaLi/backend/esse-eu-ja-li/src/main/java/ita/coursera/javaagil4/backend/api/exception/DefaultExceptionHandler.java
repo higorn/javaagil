@@ -7,6 +7,7 @@ package ita.coursera.javaagil4.backend.api.exception;
 
 import ita.coursera.javaagil4.backend.api.model.ApiResponse;
 
+import javax.persistence.NoResultException;
 import javax.security.auth.login.AccountException;
 import javax.validation.ValidationException;
 import javax.ws.rs.core.MediaType;
@@ -33,6 +34,8 @@ public class DefaultExceptionHandler implements ExceptionMapper<Exception> {
         } else if (exception instanceof ValidationException) {
             status = Response.Status.BAD_REQUEST;
             message = exception.getMessage();
+        } else if (exception instanceof NoResultException) {
+            status = Response.Status.NOT_FOUND;
         }
         logger.log(Level.SEVERE, exception.getMessage(), exception);
         return Response.status(status).

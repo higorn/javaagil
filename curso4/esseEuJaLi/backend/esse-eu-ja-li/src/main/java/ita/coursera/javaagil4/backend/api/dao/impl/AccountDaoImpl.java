@@ -9,19 +9,21 @@ import ita.coursera.javaagil4.backend.api.dao.AccountDao;
 import ita.coursera.javaagil4.backend.api.model.Account;
 import ita.coursera.javaagil4.backend.api.persistence.DataSourceQualifier;
 
-import java.util.Optional;
-
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.transaction.TransactionManager;
 import javax.ws.rs.WebApplicationException;
+import java.util.Optional;
+import java.util.logging.Logger;
 
 /**
  * @author higor
  */
 public class AccountDaoImpl implements AccountDao {
+    private static final Logger logger = Logger.getLogger(AccountDaoImpl.class.getName());
+
     @Inject
     @DataSourceQualifier
     private EntityManager em;
@@ -30,7 +32,8 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public Account findById(String id) {
-        return em.find(Account.class, id);
+        return Optional.ofNullable(em.find(Account.class, id))
+                .orElseThrow(() -> new  NoResultException("Not found"));
     }
 
     public Account findByName(String name) {
@@ -41,7 +44,7 @@ public class AccountDaoImpl implements AccountDao {
 
 	@Override
 	public Optional<Account> findByToken(String token) {
-        final TypedQuery<Account> query = em.createQuery("SELECT a FROM Account a WHERE a.token= :token", Account.class);
+        final TypedQuery<Account> query = em.createQuery("SELECT a FROM Account a WHERE a.token = :token", Account.class);
         query.setParameter("token", token);
         try {
 			return Optional.of(query.getSingleResult());

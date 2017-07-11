@@ -26,6 +26,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -51,6 +52,7 @@ public class ApiV1RestServiceApplicationIT {
 	private MongoClient mongoClient;
 	private Client client;
 	private Document accountDocument;
+	private String token;
 
 	@BeforeClass
 	public static void beforeClass() throws NamingException {
@@ -59,7 +61,7 @@ public class ApiV1RestServiceApplicationIT {
 	}
 
 	@Before
-	public void setUp() {
+	public void setUp() throws NoSuchAlgorithmException {
 		ResteasyDeployment deployment = new ResteasyDeployment();
 		deployment.setApplication(application);
 		deployment.setProviders(new ArrayList<>(Arrays.asList(new Object[]{exceptionHandler, interceptor})));
@@ -72,6 +74,7 @@ public class ApiV1RestServiceApplicationIT {
 		initParams.put("resteasy.servlet.mapping.prefix", "/api/v1");
 
 		server.deploy(deployment, "esse-eu-ja-li", contextParams, initParams);
+		token = HashUtils.generateToken();
 		mongoClient = new MongoClient();
 		MongoDatabase mongoDatabase = mongoClient.getDatabase("esseEuJaLiTest");
 		accountCollection = mongoDatabase.getCollection("account");
@@ -80,13 +83,14 @@ public class ApiV1RestServiceApplicationIT {
 				.append("displayName", "Lauterio")
 				.append("role", "user")
 				.append("password", HashUtils.hashPassword("lauterio", "cba"))
-				.append("token", null);
+				.append("token", token);
 		accountCollection.insertOne(accountDocument);
 		client = ClientBuilder.newBuilder().build();
 	}
 
 	@After
 	public void tearDown() {
+	    client.close();
 		accountCollection.deleteMany(new Document());
 		mongoClient.close();
 	}
@@ -137,24 +141,76 @@ public class ApiV1RestServiceApplicationIT {
 	}
 
 	@Test
-	public void deveCriarUmaNovaConta() {
+	public void paraBuscaDeContaDeveRetornarUmaContaValida() {
+		Response response = client.target(TestPortProvider.generateURL(API_V1_PATH + "/account/123"))
+				.request(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Basic " + token)
+				.get();
+		assertNotNull(response);
+		assertEquals(200, response.getStatus());
+		Document document = Document.parse(response.readEntity(String.class));
+		assertEquals(accountDocument.get("_id"), document.get("id"));
+		assertEquals(accountDocument.get("name"), document.get("name"));
+		assertEquals(accountDocument.get("displayName"), document.get("displayName"));
+		assertEquals(accountDocument.get("role"), document.get("role"));
+		assertEquals(accountDocument.get("token"), document.get("token"));
+		assertNull(document.get("password"));
+    }
+
+	@Test
+	public void paraBuscaDeContaComIdInvalidoDeveRetornarErro() {
+		Response response = client.target(TestPortProvider.generateURL(API_V1_PATH + "/account/321"))
+				.request(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Basic " + token)
+				.get();
+		assertNotNull(response);
+		assertEquals(404, response.getStatus());
+		Document document = Document.parse(response.readEntity(String.class));
+		assertEquals(404, document.get("code"));
+		assertEquals("Not Found", document.get("status"));
+		assertEquals(":(", document.get("data"));
+	}
+
+	@Test
+	public void deveCriarERemoverUmaNovaConta() {
 		Entity<Account> entity = Entity.json(new Account("toya", "Toya", "dog", "4321", null));
 		Response response = client.target(TestPortProvider.generateURL(API_V1_PATH + "/account/"))
 				.request(MediaType.APPLICATION_JSON)
 				.post(entity);
 		assertNotNull(response);
 		assertEquals(201, response.getStatus());
+		Document document = Document.parse(response.readEntity(String.class));
+		assertEquals(201, document.get("code"));
+		assertEquals("Created", document.get("status"));
+		assertNotNull(document.get("data"));
+		client.close();
+
+		client = ClientBuilder.newBuilder().build();
+		response = client.target(TestPortProvider.generateURL(API_V1_PATH + "/account/" + document.get("data")))
+				.request(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Basic " + token)
+				.delete();
+		assertNotNull(response);
+		assertEquals(202, response.getStatus());
+		client.close();
+
+		client = ClientBuilder.newBuilder().build();
+		response = client.target(TestPortProvider.generateURL(API_V1_PATH + "/account/" + document.get("data")))
+				.request(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Basic " + token)
+				.get();
+		assertNotNull(response);
+		assertEquals(404, response.getStatus());
 	}
 
 	@Test
 	public void deveAtualizarUmaConta() {
-		String basicAuthEncoded = Base64.encodeBytes("lauterio:cba".getBytes());
 	    Account account = new Account("lauterio", "Lauterio", "user", "4321", null);
 	    account.setId((String) accountDocument.get("_id"));
 		Entity<Account> entity = Entity.json(account);
 		Response response = client.target(TestPortProvider.generateURL(API_V1_PATH + "/account/"))
 				.request(MediaType.APPLICATION_JSON)
-				.header("Authorization", "Basic " + basicAuthEncoded)
+				.header("Authorization", "Basic " + token)
 				.put(entity);
 		assertNotNull(response);
 		assertEquals(200, response.getStatus());
@@ -163,7 +219,21 @@ public class ApiV1RestServiceApplicationIT {
 		assertEquals(accountDocument.get("name"), document.get("name"));
 		assertEquals(accountDocument.get("displayName"), document.get("displayName"));
 		assertEquals(accountDocument.get("role"), document.get("role"));
-		assertNull(document.get("token"));
+		assertEquals(accountDocument.get("token"), document.get("token"));
 		assertNull(document.get("password"));
+	}
+
+	@Test
+	public void deveFazerLogout() {
+		Response response = client.target(TestPortProvider.generateURL(API_V1_PATH + "/account/logout"))
+				.request(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Basic " + token)
+				.get();
+		assertNotNull(response);
+		assertEquals(200, response.getStatus());
+		Document document = Document.parse(response.readEntity(String.class));
+		assertEquals(200, document.get("code"));
+		assertEquals("OK", document.get("status"));
+		assertEquals("Bye ;)", document.get("data"));
 	}
 }

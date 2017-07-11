@@ -12,12 +12,10 @@ import ita.coursera.javaagil4.backend.api.rest.AccountRestService;
 import org.jboss.resteasy.core.ResourceMethodInvoker;
 import org.jboss.resteasy.core.interception.jaxrs.PostMatchContainerRequestContext;
 import org.jboss.resteasy.spi.HttpRequest;
-import org.jboss.resteasy.util.Base64;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
@@ -99,7 +97,7 @@ public class SecurityInterceptorTest {
         accountExpected.setDisplayName("Lauterio");
         accountExpected.setToken(token);
 
-        when(accountDao.findByToken(token)).thenReturn(Optional.of(accountExpected));
+        when(accountDao.findByToken(token + "abc")).thenReturn(Optional.empty());
 
         interceptor.filter(requestContext);
         verify(accountDao).findByToken(token + "abc");

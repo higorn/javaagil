@@ -9,8 +9,10 @@ import ita.coursera.javaagil4.backend.api.model.Account;
 import javax.security.auth.login.AccountException;
 
 public interface AccountService {
-    Account getAccount(String id) throws AccountException;
+    Account getAccount(String id);
     Account login(String authorization) throws AccountException;
     Account createAccount(Account accountExpected);
     Account updateAccount(Account account);
+    void remove(Account account);
+    void logout(String token);
 }

@@ -3,29 +3,26 @@ package ita.coursera.javaagil4.backend.api.dao.impl;
 import ita.coursera.javaagil4.backend.api.WeldJUnit4Runner;
 import ita.coursera.javaagil4.backend.api.model.Account;
 import ita.coursera.javaagil4.backend.api.security.HashUtils;
-
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
-import java.security.NoSuchAlgorithmException;
-import java.util.Optional;
 
 /*
  * File:   AccountDaoImplTest.java
@@ -76,11 +73,21 @@ public class AccountDaoImplIT {
         assertEquals(this.account.getToken(), account.getToken());
     }
 
+    @Test(expected = NoResultException.class)
+    public void quandoNomeNaoEncontradoDeveRetornarErro() {
+        dao.findByName("Jeronimo");
+    }
+
     @Test
     public void deveEncontrarContaPeloId() {
         Account account = dao.findById(this.account.getId());
         assertNotNull(account);
         assertEquals(this.account.getId(), account.getId());
+    }
+
+    @Test(expected = NoResultException.class)
+    public void quandoIdNaoEncontradoDeveRetornarErro() {
+        dao.findById("321");
     }
 
     @Test
@@ -112,5 +119,12 @@ public class AccountDaoImplIT {
         Account accountUpdated = dao.update(account);
         assertNotNull(accountUpdated);
         assertEquals(account.getPassword(), accountUpdated.getPassword());
+    }
+
+    @Test(expected = NoResultException.class)
+    public void deveRemoverUmaConta() {
+        Account account = dao.create(new Account("jeronimo", "Jerônimo", "user", "abc", null));
+        dao.remove(account);
+        dao.findById(account.getId());
     }
 }

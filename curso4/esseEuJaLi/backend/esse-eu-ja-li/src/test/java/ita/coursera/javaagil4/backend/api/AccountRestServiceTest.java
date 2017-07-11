@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
@@ -82,7 +81,7 @@ public class AccountRestServiceTest {
 		accountExpected.setDisplayName("Lauterio");
 		accountExpected.setPassword("cba");
 
-		Mockito.doAnswer(invocation -> null).when(accountService).createAccount(accountExpected);
+		when(accountService.createAccount(accountExpected)).thenReturn(accountExpected);
 
 		Response response = restService.createAccount(accountExpected);
 		assertNotNull(response);
@@ -91,7 +90,6 @@ public class AccountRestServiceTest {
 		ApiResponse<String> apiResponse = (ApiResponse<String>) response.getEntity();
 		assertEquals(Integer.valueOf(201), apiResponse.getCode());
 		assertEquals("Created", apiResponse.getStatus());
-		assertEquals("OK", apiResponse.getData());
 		verify(accountService).createAccount(accountExpected);
 	}
 

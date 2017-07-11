@@ -12,6 +12,7 @@ import ita.coursera.javaagil4.backend.api.service.AccountService;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 import javax.security.auth.login.AccountException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -28,8 +29,10 @@ public class AccountServiceImpl implements AccountService {
     @Inject
     private AccountDao dao;
 
-    public Account getAccount(String id) throws AccountException {
-        return dao.findById(id);
+    public Account getAccount(String id) {
+        Account account = dao.findById(id);
+        account.setPassword(null);
+        return account;
     }
 
     @Override
@@ -68,6 +71,18 @@ public class AccountServiceImpl implements AccountService {
         Account accountUpdated = dao.update(account);
         accountUpdated.setPassword(null);
         return accountUpdated;
+    }
+
+    @Override
+    public void remove(Account account) {
+        dao.remove(account);
+    }
+
+    @Override
+    public void logout(String token) {
+        Account account = dao.findByToken(token).orElseThrow(() -> new NoResultException("Not found"));
+        account.setToken(null);
+        dao.update(account);
     }
 
     private void validaSenha(final String usuario, final String senhaInformada, final String senhaEsperada) throws AccountException {
