@@ -29,8 +29,8 @@ public class EntityManagerProvider {
         return this.entityManager;
     }
 
-    @Produces
-    public TransactionManager getTransactionManager() {
-        return com.arjuna.ats.jta.TransactionManager.transactionManager();
-    }
+//    @Produces
+//    public TransactionManager getTransactionManager() {
+//        return com.arjuna.ats.jta.TransactionManager.transactionManager();
+//    }
 }

@@ -5,10 +5,14 @@
  */
 package ita.coursera.javaagil4.backend.api.security;
 
-import ita.coursera.javaagil4.backend.api.dao.AccountDao;
-import ita.coursera.javaagil4.backend.api.model.Account;
-import ita.coursera.javaagil4.backend.api.model.ApiResponse;
-import org.jboss.resteasy.core.ResourceMethodInvoker;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -18,20 +22,19 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+
+import org.jboss.resteasy.core.ResourceMethodInvoker;
+
+import ita.coursera.javaagil4.backend.api.dao.AccountDao;
+import ita.coursera.javaagil4.backend.api.model.Account;
+import ita.coursera.javaagil4.backend.api.model.ApiResponse;
 
 /**
  * @author higor
  */
 @Provider
 public class SecurityInterceptor implements ContainerRequestFilter {
+	private static final Logger logger = Logger.getLogger(SecurityInterceptor.class.getName());
 
     public static final String RESOURCE_METHOD_INVOKER = "org.jboss.resteasy.core.ResourceMethodInvoker";
     private static final String AUTHORIZATION_PROP = "Authorization";
@@ -54,6 +57,7 @@ public class SecurityInterceptor implements ContainerRequestFilter {
         final List<String> authorization = headers.get(AUTHORIZATION_PROP);
 
         if (authorization == null || authorization.isEmpty()) {
+        	logger.warning("Faltou header Authorization");
             requestContext.abortWith(buildResponse(Response.Status.BAD_REQUEST, ":("));
             return;
         }
