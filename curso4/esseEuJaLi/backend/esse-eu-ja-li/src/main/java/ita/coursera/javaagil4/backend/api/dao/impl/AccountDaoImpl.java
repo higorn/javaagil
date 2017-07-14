@@ -5,7 +5,6 @@
  */
 package ita.coursera.javaagil4.backend.api.dao.impl;
 
-import ita.coursera.javaagil4.backend.api.ApiV1RestServiceApplication;
 import ita.coursera.javaagil4.backend.api.dao.AccountDao;
 import ita.coursera.javaagil4.backend.api.model.Account;
 import ita.coursera.javaagil4.backend.api.persistence.DataSourceQualifier;
@@ -15,13 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import javax.transaction.Status;
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
 import javax.ws.rs.WebApplicationException;
-
-import org.hibernate.engine.transaction.jta.platform.internal.JBossStandAloneJtaPlatform;
-
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -34,8 +27,6 @@ public class AccountDaoImpl implements AccountDao {
     @Inject
     @DataSourceQualifier
     private EntityManager em;
-//    @Inject
-//    private TransactionManager tm;
 
     @Override
     public Account findById(String id) {
@@ -63,10 +54,7 @@ public class AccountDaoImpl implements AccountDao {
 	public Account create(Account account) {
         try {
         	EntityTransaction tx = em.getTransaction();
-//        	TransactionManager tm = com.arjuna.ats.jta.TransactionManager.transactionManager();
-//        	if (tm.getStatus() == Status.STATUS_NO_TRANSACTION) {
-				tx.begin();
-//        	}
+            tx.begin();
             em.persist(account);
             tx.commit();
         } catch (Exception e) {
@@ -79,10 +67,7 @@ public class AccountDaoImpl implements AccountDao {
     public void remove(Account account) {
         try {
         	EntityTransaction tx = em.getTransaction();
-//        	TransactionManager tm = com.arjuna.ats.jta.TransactionManager.transactionManager();
-//        	if (tm.getStatus() == Status.STATUS_NO_TRANSACTION) {
-				tx.begin();
-//        	}
+			tx.begin();
             em.remove(account);
             tx.commit();
         } catch (Exception e) {
@@ -103,10 +88,7 @@ public class AccountDaoImpl implements AccountDao {
 
         try {
         	EntityTransaction tx = em.getTransaction();
-//        	TransactionManager tm = com.arjuna.ats.jta.TransactionManager.transactionManager();
-//        	if (tm.getStatus() == Status.STATUS_NO_TRANSACTION) {
-				tx.begin();
-//        	}
+			tx.begin();
             accountUpdated = em.merge(accountUpdated);
             tx.commit();
         } catch (Exception e) {
@@ -115,11 +97,4 @@ public class AccountDaoImpl implements AccountDao {
         }
         return accountUpdated;
     }
-
-    public static TransactionManager getTransactionManager() throws Exception {
-    	JBossStandAloneJtaPlatform jtaPlatform = new JBossStandAloneJtaPlatform();
-    	return jtaPlatform.getTransactionManager();
-//		Class<?> tmClass = ApiV1RestServiceApplication.class.getClassLoader().loadClass(JBOSS_TM_CLASS_NAME);
-//		return (TransactionManager) tmClass.getMethod("transactionManager").invoke(null);
-	}
 }

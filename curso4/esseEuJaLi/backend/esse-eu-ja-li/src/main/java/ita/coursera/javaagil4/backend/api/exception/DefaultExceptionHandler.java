@@ -28,13 +28,13 @@ public class DefaultExceptionHandler implements ExceptionMapper<Exception> {
         Response.Status status = Response.Status.INTERNAL_SERVER_ERROR;
         String message = ":(";
 
-        if (exception instanceof AccountException) {
+        if (exception instanceof AccountException || exception.getCause() instanceof AccountException) {
             status = Response.Status.UNAUTHORIZED;
             message = exception.getMessage();
-        } else if (exception instanceof ValidationException) {
+        } else if (exception instanceof ValidationException || exception.getCause() instanceof ValidationException) {
             status = Response.Status.BAD_REQUEST;
             message = exception.getMessage();
-        } else if (exception instanceof NoResultException) {
+        } else if (exception instanceof NoResultException || exception.getCause() instanceof NoResultException) {
             status = Response.Status.NOT_FOUND;
         }
         logger.log(Level.SEVERE, exception.getMessage(), exception);

@@ -67,7 +67,7 @@ public class AccountRestService {
 
 	@GET
 	@Path("/{id}")
-    @RolesAllowed("user")
+    @RolesAllowed({"user", "admin"})
     @Produces(MediaType.APPLICATION_JSON)
 	public Account getAccount(@PathParam("id") final String id) throws AccountException {
         logger.info("Start getAccount");
@@ -93,7 +93,7 @@ public class AccountRestService {
 
 	@PUT
 	@Path("/{id}")
-    @RolesAllowed("user")
+    @RolesAllowed({"user", "admin"})
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
 	public Account updateAccount(@PathParam("id") final String id, final Account account) {
@@ -106,11 +106,10 @@ public class AccountRestService {
     @RolesAllowed("admin")
     @Produces(MediaType.APPLICATION_JSON)
 	public Response deleteAccount(@PathParam("id") final String id) throws AccountException {
-        Account account = service.getAccount(id);
-        service.remove(account);
+        service.remove(id);
         Response.Status status = Response.Status.ACCEPTED;
         Response response = Response.status(status)
-                .entity(new ApiResponse<>(status.getStatusCode(), status.toString(), account.getId()))
+                .entity(new ApiResponse<>(status.getStatusCode(), status.toString(), id))
                 .type(MediaType.APPLICATION_JSON)
                 .build();
         return response;

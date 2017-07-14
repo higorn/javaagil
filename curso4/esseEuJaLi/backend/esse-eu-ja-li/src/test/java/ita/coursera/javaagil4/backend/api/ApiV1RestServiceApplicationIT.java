@@ -1,5 +1,6 @@
 package ita.coursera.javaagil4.backend.api;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -185,6 +186,9 @@ public class ApiV1RestServiceApplicationIT {
 		assertNotNull(document.get("data"));
 		client.close();
 
+		BasicDBObject newDocument = new BasicDBObject();
+		newDocument.append("$set", new BasicDBObject().append("role", "admin"));
+		accountCollection.updateOne(new BasicDBObject().append("name", "lauterio"), newDocument);
 		client = ClientBuilder.newBuilder().build();
 		response = client.target(TestPortProvider.generateURL(API_V1_PATH + "/account/" + document.get("data")))
 				.request(MediaType.APPLICATION_JSON)
@@ -206,9 +210,8 @@ public class ApiV1RestServiceApplicationIT {
 	@Test
 	public void deveAtualizarUmaConta() {
 	    Account account = new Account("lauterio", "Lauterio", "user", "4321", null);
-	    account.setId((String) accountDocument.get("_id"));
 		Entity<Account> entity = Entity.json(account);
-		Response response = client.target(TestPortProvider.generateURL(API_V1_PATH + "/account/"))
+		Response response = client.target(TestPortProvider.generateURL(API_V1_PATH + "/account/" + accountDocument.get("_id")))
 				.request(MediaType.APPLICATION_JSON)
 				.header("Authorization", "Basic " + token)
 				.put(entity);

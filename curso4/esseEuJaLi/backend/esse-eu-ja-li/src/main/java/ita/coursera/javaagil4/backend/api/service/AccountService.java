@@ -13,6 +13,6 @@ public interface AccountService {
     Account login(String authorization) throws AccountException;
     Account createAccount(Account accountExpected);
     Account updateAccount(Account account);
-    void remove(Account account);
+    void remove(String accountId);
     void logout(String token);
 }

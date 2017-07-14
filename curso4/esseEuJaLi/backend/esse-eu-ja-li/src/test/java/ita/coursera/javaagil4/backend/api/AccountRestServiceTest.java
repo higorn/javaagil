@@ -103,7 +103,7 @@ public class AccountRestServiceTest {
 		accountExpected.setPassword("def");
 		when(accountService.updateAccount(accountExpected)).thenReturn(accountExpected);
 
-		Account accountUpdated = restService.updateAccount(accountExpected);
+		Account accountUpdated = restService.updateAccount(accountExpected.getId(), accountExpected);
 		assertEquals(accountExpected.getPassword(), accountUpdated.getPassword());
 		verify(accountService).updateAccount(accountExpected);
 	}

@@ -125,6 +125,7 @@ public class SecurityInterceptorTest {
         Account accountExpected = new Account();
         accountExpected.setName("lauterio");
         accountExpected.setDisplayName("Lauterio");
+        accountExpected.setRole("user");
         accountExpected.setToken(token);
 
         when(accountDao.findByToken(token)).thenReturn(Optional.of(accountExpected));

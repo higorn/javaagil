@@ -74,8 +74,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void remove(Account account) {
-        dao.remove(account);
+    public void remove(final String accountId) {
+        dao.remove(dao.findById(accountId));
     }
 
     @Override
