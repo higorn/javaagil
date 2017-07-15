@@ -7,6 +7,8 @@ import {Location} from '@angular/common';
 import {LoginComponent} from '../login/login.component';
 import {CustomMdModule} from '../custom-md/custom-md.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {AccountService} from '../service/account.service';
+import {HttpModule} from '@angular/http';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -24,6 +26,10 @@ describe('HomeComponent', () => {
         CustomMdModule,
         FormsModule,
         ReactiveFormsModule,
+        HttpModule,
+      ],
+      providers: [
+        AccountService,
       ]
     })
     .compileComponents();

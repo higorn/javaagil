@@ -12,7 +12,7 @@ describe('AccountService', () => {
         TestBed.configureTestingModule({
             imports: [
                 HttpModule,
-                InMemoryWebApiModule.forRoot(InMemoryDataService),
+                InMemoryWebApiModule.forRoot(InMemoryDataService, {apiBase: 'esse-eu-ja-li/api/v1/account/'}),
             ],
             providers: [
                 AccountService,
@@ -26,7 +26,7 @@ describe('AccountService', () => {
 
     it('with valid user, should get user account', async(() => {
         const service = TestBed.get(AccountService);
-        const accountPromise = service.get(validUser);
+        const accountPromise = service.login(validUser);
         accountPromise.then(result => {
             expect(result).toEqual(validAccount);
         }).catch(error => {

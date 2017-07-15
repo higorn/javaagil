@@ -27,7 +27,7 @@ import {AccountService} from './service/account.service';
         BrowserAnimationsModule,
         AppRoutingModule,
         CustomMdModule,
-        InMemoryWebApiModule.forRoot(InMemoryDataService),
+        // InMemoryWebApiModule.forRoot(InMemoryDataService),
         HttpModule,
     ],
     providers: [

@@ -1,6 +1,6 @@
 export const validUser = {
     name: 'nicanor',
-    password: '****',
+    password: 'abc'
 };
 export const blankdUser = {
     name: undefined,
@@ -10,9 +10,11 @@ export const invalidUser = {
     name: 'anonymous',
     password: '',
 };
-export const validAccount = [{
-    id: 1,
-    name: 'nicanor',
-    displayName: 'Nicanor',
-    token: 'abc',
-}];
+export const validAccount = {
+    data: [{
+        id: 1,
+        name: 'nicanor',
+        displayName: 'Nicanor',
+        token: 'abc',
+    }]
+};

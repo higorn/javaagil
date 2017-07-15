@@ -82,7 +82,7 @@ describe('LoginComponent', () => {
         }
 
         const loginService = TestBed.get(AccountService);
-        spy = spyOn(loginService, 'get').and.returnValue(Promise.resolve({name: 'Nicanor', authToken: 'abc'}));
+        spy = spyOn(loginService, 'login').and.returnValue(Promise.resolve({name: 'Nicanor', authToken: 'abc'}));
 
         updateForm(validUser.name, validUser.password);
 
@@ -108,7 +108,7 @@ describe('LoginComponent', () => {
         }
 
         const loginService = TestBed.get(AccountService);
-        spy = spyOn(loginService, 'get').and.returnValue(Promise.reject(new Error('Login inválido').message));
+        spy = spyOn(loginService, 'login').and.returnValue(Promise.reject(new Error('Login inválido').message));
 
         updateForm(invalidUser.name, invalidUser.password);
 

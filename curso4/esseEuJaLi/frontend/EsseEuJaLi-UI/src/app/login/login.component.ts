@@ -35,9 +35,9 @@ export class LoginComponent implements OnInit {
 
     onLogin(): void {
         this.user = this.loginForm.value;
-        this.service.get(this.user).then(resp => {
-            console.log(resp);
-            localStorage.setItem('authToken', 'abc');
+        this.service.login(this.user).then(account => {
+            console.log(account);
+            localStorage.setItem('account', JSON.stringify(account));
             this.router.navigate(['/home']);
         }, error => {
             this.message = error;
