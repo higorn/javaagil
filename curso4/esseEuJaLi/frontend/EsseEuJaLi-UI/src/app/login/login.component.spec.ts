@@ -5,7 +5,7 @@ import {CustomMdModule} from '../custom-md/custom-md.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
 import {Location} from '@angular/common';
-import {routes} from '../app-routing/app-routing.module';
+import {routes} from '../app-routing.module';
 import {HomeComponent} from '../home/home.component';
 import {By} from '@angular/platform-browser';
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -75,7 +75,7 @@ describe('LoginComponent', () => {
             expect(component.user).toEqual(validUser);
             expect(fixture.debugElement.query(By.css('#inputUser')).nativeElement.value).toBe(validUser.name);
             expect(fixture.debugElement.query(By.css('#inputPassword')).nativeElement.value).toBe(validUser.password);
-            expect(localStorage.getItem('authToken')).not.toBeNull();
+            expect(localStorage.getItem('account')).not.toBeNull();
             expect(spy.calls.any()).toBeTruthy();
             expect(location.path()).toBe('/home');
             done();
@@ -86,7 +86,7 @@ describe('LoginComponent', () => {
 
         updateForm(validUser.name, validUser.password);
 
-        localStorage.removeItem('authToken');
+        localStorage.removeItem('account');
         component.onLogin();
         fixture.detectChanges();
 

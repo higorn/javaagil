@@ -2,7 +2,7 @@ import {async, ComponentFixture, inject, TestBed} from '@angular/core/testing';
 
 import { HomeComponent } from './home.component';
 import {RouterTestingModule} from '@angular/router/testing';
-import {routes} from '../app-routing/app-routing.module';
+import {routes} from '../app-routing.module';
 import {Location} from '@angular/common';
 import {LoginComponent} from '../login/login.component';
 import {CustomMdModule} from '../custom-md/custom-md.module';

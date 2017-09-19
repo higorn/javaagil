@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MdInputModule, MdButtonModule, MdCardModule } from '@angular/material';
+import {
+  MdInputModule, MdButtonModule, MdCardModule, MdTabsModule, MdToolbarModule,
+  MdIconModule, MdCheckboxModule, MdGridListModule
+} from '@angular/material';
 
 @NgModule({
   imports: [
@@ -8,11 +11,21 @@ import { MdInputModule, MdButtonModule, MdCardModule } from '@angular/material';
     MdInputModule,
     MdButtonModule,
     MdCardModule,
+    MdTabsModule,
+    MdToolbarModule,
+    MdIconModule,
+    MdCheckboxModule,
+    MdGridListModule,
   ],
   exports: [
     MdInputModule,
     MdButtonModule,
     MdCardModule,
+    MdTabsModule,
+    MdToolbarModule,
+    MdIconModule,
+    MdCheckboxModule,
+    MdGridListModule,
   ]
 })
 export class CustomMdModule {

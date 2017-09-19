@@ -1,0 +1,30 @@
+<div class="page">
+  <md-card>
+    <md-card-header>
+      <div md-card-avatar>
+        <button md-icon-button color="primary" (click)="goBack()">
+          <md-icon>arrow_back</md-icon>
+        </button>
+      </div>
+      <md-card-title>{{livro.titulo}}</md-card-title>
+      <md-card-subtitle>{{livro.subTitulo}}</md-card-subtitle>
+    </md-card-header>
+    <md-card-content>
+      <section>
+        <label><strong>Autor:</strong> {{livro.autor}}</label>
+      </section>
+      <section>
+          <label><strong>Editora:</strong> {{livro.editora}}</label>
+      </section>
+      <section>
+          <label><strong>Categoria:</strong> {{livro.categoria}}</label>
+      </section>
+      <section>
+          <label><strong>Nº de páginas:</strong> {{livro.paginas}}</label>
+      </section>
+    </md-card-content>
+    <md-card-actions>
+      <md-checkbox [(ngModel)]="livro.lido" (change)="onChange()">Já li</md-checkbox>
+    </md-card-actions>
+  </md-card>
+</div>

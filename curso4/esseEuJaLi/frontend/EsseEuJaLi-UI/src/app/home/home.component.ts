@@ -8,17 +8,24 @@ import {AccountService} from '../service/account.service';
     styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-    title = 'app';
 
-    constructor(private router: Router,
-                private service: AccountService,) {
+    pages = [
+      { link: 'livros', label: 'Livros' },
+      { link: 'ranking', label: 'Ranking' },
+      { link: 'perfil', label: 'Perfil' }
+    ];
+    constructor(
+      private router: Router,
+      private service: AccountService,
+    ) {
     }
 
     ngOnInit() {
     }
 
     onLogout() {
-        this.service.logout();
+        // this.service.logout();
+        localStorage.removeItem('account');
         this.router.navigate(['login']);
     }
 }

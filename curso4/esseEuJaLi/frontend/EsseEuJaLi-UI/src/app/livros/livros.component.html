@@ -1,0 +1,19 @@
+<div class="page">
+  <md-grid-list cols="3" rowHeight="2:1">
+    <md-grid-tile *ngFor="let livro of livros">
+      <a [routerLink]="['/home/livros', livro.id]">
+        <md-card>
+          <md-card-header>
+            <md-card-title><h3>{{livro.titulo}}</h3></md-card-title>
+          </md-card-header>
+          <md-card-content>
+            {{livro.subTitulo}}
+          </md-card-content>
+          <md-card-actions>
+            <md-checkbox [(ngModel)]="livro.lido" disabled></md-checkbox>
+          </md-card-actions>
+        </md-card>
+      </a>
+    </md-grid-tile>
+  </md-grid-list>
+</div>

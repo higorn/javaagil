@@ -1,0 +1,9 @@
+nav,
+.tab-content,
+md-toolbar {
+  padding: 0 300px;
+}
+
+.tab-content {
+  background: #ebebeb;
+}

@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
         this.service.login(this.user).then(account => {
             console.log(account);
             localStorage.setItem('account', JSON.stringify(account));
-            this.router.navigate(['/home']);
+            this.router.navigate(['/home/livros']);
         }, error => {
             this.message = error;
             console.log(error);
