@@ -1,0 +1,15 @@
+<div class="page">
+  <md-table [dataSource]="datasource">
+    <ng-container mdColumnDef="name">
+      <md-header-cell *mdHeaderCellDef>Nome</md-header-cell>
+      <md-cell *mdCellDef="let row">{{row.name}}</md-cell>
+    </ng-container>
+    <ng-container mdColumnDef="pontos">
+      <md-header-cell *mdHeaderCellDef>Pontos</md-header-cell>
+      <md-cell *mdCellDef="let row">{{row.pontos}}</md-cell>
+    </ng-container>
+
+    <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+    <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+  </md-table>
+</div>

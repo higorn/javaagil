@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Location } from '@angular/common';
 
+import 'rxjs/add/operator/switchMap';
+
 import { Livro } from '../../model/livro';
 import { LivroService } from '../../service/livro.service';
 import { UserAccount } from '../../model/user-account';
-import { User } from '../../model/user';
-import { UsuarioLivro } from '../../model/usuario-livro';
 
 @Component({
   selector: 'app-livro-detalhe',

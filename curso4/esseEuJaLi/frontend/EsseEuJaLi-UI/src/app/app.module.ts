@@ -17,6 +17,7 @@ import {AccountService} from './service/account.service';
 import { LivrosComponent } from './livros/livros.component';
 import {LivroService} from './service/livro.service';
 import { LivroDetalheComponent } from './livros/livro-detalhe/livro-detalhe.component';
+import { RankingComponent } from './ranking/ranking.component';
 
 @NgModule({
     declarations: [
@@ -24,7 +25,8 @@ import { LivroDetalheComponent } from './livros/livro-detalhe/livro-detalhe.comp
         LoginComponent,
         HomeComponent,
         LivrosComponent,
-        LivroDetalheComponent
+        LivroDetalheComponent,
+        RankingComponent
     ],
     imports: [
         BrowserModule,

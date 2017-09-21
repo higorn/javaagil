@@ -6,9 +6,9 @@ export class InMemoryDataService implements InMemoryDbService {
 
     createDb(): {} {
         const account: UserAccount = [
-            {id: '1', name: 'nicanor', displayName: 'Nicanor', token: 'abc'},
-            {id: '2', name: 'tintones', displayName: 'Tintones', token: 'abc'},
-            {id: '3', name: 'lauterio', displayName: 'Lauterio', token: 'abc'},
+          {id: '1', name: 'nicanor', displayName: 'Nicanor', token: 'abc'},
+          {id: '2', name: 'tintones', displayName: 'Tintones', token: 'abc'},
+          {id: '3', name: 'lauterio', displayName: 'Lauterio', token: 'abc'},
           {id: '4', name: 'cineide', displayName: 'Cineide', token: 'abc'},
           {id: '5', name: 'pimpolho', displayName: 'Pimpolho', token: 'abc'},
           {id: '6', name: 'jonelson', displayName: 'Jonelson', token: 'abc'},
@@ -30,16 +30,16 @@ export class InMemoryDataService implements InMemoryDbService {
           {id: '10', livros: []},
         ];
         const usuarioPonto = [
-          {id: '1', pontos: []},
-          {id: '2', pontos: []},
-          {id: '3', pontos: []},
-          {id: '4', pontos: []},
-          {id: '5', pontos: []},
-          {id: '6', pontos: []},
-          {id: '7', pontos: []},
-          {id: '8', pontos: []},
-          {id: '9', pontos: []},
-          {id: '10', pontos: []},
+          {id: '1', name: 'nicanor', pontos: []},
+          {id: '2', name: 'tintones', pontos: []},
+          {id: '3', name: 'lauterio', pontos: []},
+          {id: '4', name: 'cineide', pontos: []},
+          {id: '5', name: 'pimpolho', pontos: []},
+          {id: '6', name: 'jonelson', pontos: []},
+          {id: '7', name: 'papael', pontos: []},
+          {id: '8', name: 'dante', pontos: []},
+          {id: '9', name: 'ramon', pontos: []},
+          {id: '10', name: 'ledesma', pontos: []},
         ];
         const livros: Livro[] = [
             {id: '1', titulo: 'Design Patterns com Java', subTitulo: 'Projeto orientado a objetos guuado por padrões',

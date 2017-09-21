@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import {
   MdInputModule, MdButtonModule, MdCardModule, MdTabsModule, MdToolbarModule,
-  MdIconModule, MdCheckboxModule, MdGridListModule
+  MdIconModule, MdCheckboxModule, MdGridListModule, MdTableModule
 } from '@angular/material';
 
 @NgModule({
@@ -16,6 +16,7 @@ import {
     MdIconModule,
     MdCheckboxModule,
     MdGridListModule,
+    MdTableModule,
   ],
   exports: [
     MdInputModule,
@@ -26,6 +27,7 @@ import {
     MdIconModule,
     MdCheckboxModule,
     MdGridListModule,
+    MdTableModule,
   ]
 })
 export class CustomMdModule {
