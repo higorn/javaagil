@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import {LivrosComponent} from './livros/livros.component';
 import {LivroDetalheComponent} from './livros/livro-detalhe/livro-detalhe.component';
 import { RankingComponent } from './ranking/ranking.component';
+import { PerfilComponent } from './perfil/perfil.component';
 
 export const routes: Routes = [
   {
@@ -14,6 +15,7 @@ export const routes: Routes = [
       { path: 'livros', component: LivrosComponent },
       { path: 'livros/:id', component: LivroDetalheComponent },
       { path: 'ranking', component: RankingComponent },
+      { path: 'perfil', component: PerfilComponent },
     ]
   },
   { path: 'login', component: LoginComponent },

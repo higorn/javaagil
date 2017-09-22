@@ -17,7 +17,7 @@ export class RankingComponent implements OnInit {
   constructor(private service: LivroService) { }
 
   ngOnInit() {
-    this.service.getPontosUsuario().then(pontos => {
+    this.service.getPontosUsuarios().then(pontos => {
       console.log(pontos);
       this.datasource = new ListDataSource(pontos.map(ponto => {
         return {name: ponto.name, pontos: ponto.pontos.reduce((val, p) => val + p.valor, 0)}
@@ -34,7 +34,7 @@ export class ListDataSource extends DataSource<{name: string, pontos: number}> {
   }
 
   connect(collectionViewer: CollectionViewer): Observable<{name: string, pontos: number}[]> {
-    return Observable.of(this.data);
+    return Observable.of(this.data.sort((a, b) => b.pontos - a.pontos));
   }
 
   disconnect(collectionViewer: CollectionViewer): void {

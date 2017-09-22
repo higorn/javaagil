@@ -1,11 +1,11 @@
 <div class="page">
-  <md-table [dataSource]="datasource">
+  <md-table [dataSource]="datasource" mdSort>
     <ng-container mdColumnDef="name">
-      <md-header-cell *mdHeaderCellDef>Nome</md-header-cell>
+      <md-header-cell *mdHeaderCellDef md-sort-header>Nome</md-header-cell>
       <md-cell *mdCellDef="let row">{{row.name}}</md-cell>
     </ng-container>
     <ng-container mdColumnDef="pontos">
-      <md-header-cell *mdHeaderCellDef>Pontos</md-header-cell>
+      <md-header-cell *mdHeaderCellDef md-sort-header>Pontos</md-header-cell>
       <md-cell *mdCellDef="let row">{{row.pontos}}</md-cell>
     </ng-container>
 

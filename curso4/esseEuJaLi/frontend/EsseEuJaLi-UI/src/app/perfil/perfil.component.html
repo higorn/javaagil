@@ -1,0 +1,19 @@
+<div class="page">
+  <md-table [dataSource]="datasource" mdSort>
+    <ng-container mdColumnDef="pontos">
+      <md-header-cell *mdHeaderCellDef md-sort-header>Pontos</md-header-cell>
+      <md-cell *mdCellDef="let row">{{row.valor}}</md-cell>
+    </ng-container>
+    <ng-container mdColumnDef="categoria">
+      <md-header-cell *mdHeaderCellDef md-sort-header>Categoria</md-header-cell>
+      <md-cell *mdCellDef="let row">{{row.categoria}}</md-cell>
+    </ng-container>
+    <ng-container mdColumnDef="trofeus">
+      <md-header-cell *mdHeaderCellDef md-sort-header>Troféus</md-header-cell>
+      <md-cell *mdCellDef="let row">{{row.trofeus}}</md-cell>
+    </ng-container>
+
+    <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+    <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+  </md-table>
+</div>

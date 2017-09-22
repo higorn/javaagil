@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
     pages = [
       { link: 'livros', label: 'Livros' },
       { link: 'ranking', label: 'Ranking' },
-      { link: 'perfil', label: 'Perfil' }
+      { link: 'perfil', label: 'Meus pontos' }
     ];
     constructor(
       private router: Router,

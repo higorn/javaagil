@@ -59,7 +59,7 @@ export class LivroService {
       .catch(this.handleError);
   }
 
-  getPontosUsuario(): Promise<UsuarioPonto[]> {
+  getPontosUsuarios(): Promise<UsuarioPonto[]> {
     const account: UserAccount = JSON.parse(localStorage.getItem('account')) || {token: null};
     const headers = new Headers(this.headers);
     headers.append('Authorization', account.token);
@@ -69,6 +69,18 @@ export class LivroService {
           console.log(resp.json());
           return resp.json().data as UsuarioPonto[];
         }).catch(this.handleError);
+  }
+
+  getPontosUsuario(): Promise<UsuarioPonto> {
+    const account: UserAccount = JSON.parse(localStorage.getItem('account')) || {token: null};
+    const headers = new Headers(this.headers);
+    headers.append('Authorization', account.token);
+    return this.http.get(`${this.baseUrl}/usuarioPonto/${account.id}`, {headers: headers})
+      .toPromise()
+      .then(resp => {
+        console.log(resp.json());
+        return resp.json().data as UsuarioPonto;
+      }).catch(this.handleError);
   }
 
   updatePontosUsuario(livro: Livro): Promise<UsuarioPonto> {
