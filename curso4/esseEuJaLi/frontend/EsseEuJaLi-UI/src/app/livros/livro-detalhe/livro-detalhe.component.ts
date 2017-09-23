@@ -29,7 +29,7 @@ export class LivroDetalheComponent implements OnInit {
       .subscribe(livro => {
         this.account = JSON.parse(localStorage.getItem('account'));
         this.livro = livro
-        this.livro.lido = this.account['livros'].indexOf(livro.id) > -1;
+        this.livro.lido = this.account['livros'].map(l => l.id).indexOf(livro.id) > -1;
       });
   }
 

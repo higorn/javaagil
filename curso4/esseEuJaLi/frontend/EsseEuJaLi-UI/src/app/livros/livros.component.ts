@@ -25,9 +25,13 @@ export class LivrosComponent implements OnInit {
       this.service.getLivrosUsuario().then(usuarioLivro => {
         const account: UserAccount = JSON.parse(localStorage.getItem('account'));
         account['livros'] = usuarioLivro.livros;
-        localStorage.setItem('account', JSON.stringify(account));
-        this.livros.filter(livro => usuarioLivro.livros.indexOf(livro.id) > -1)
+        this.livros.filter(livro => usuarioLivro.livros.map(l => l['id']).indexOf(livro.id) > -1)
           .forEach(livro => livro.lido = true);
+
+        this.service.getPontosUsuario().then(pontos => {
+          account['pontos'] = pontos.pontos;
+          localStorage.setItem('account', JSON.stringify(account));
+        })
       });
     });
   }

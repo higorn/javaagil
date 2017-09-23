@@ -3,5 +3,5 @@ export interface UserAccount {
     name?: string;
     displayName?: string;
     imageURL?: string;
-    token?: string;
+    senha?: string;
 }

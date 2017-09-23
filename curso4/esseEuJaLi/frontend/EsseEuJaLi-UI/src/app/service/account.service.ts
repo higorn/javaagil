@@ -19,7 +19,7 @@ export class AccountService {
         const headers = new Headers(this.headers);
         headers.append('Authorization', 'Basic ' + btoa(user.name + ':' + user.password));
         console.log(user);
-        return this.http.get(`${this.baseUrl}/account/?name=${user.name}`, {headers: headers})
+        return this.http.get(`${this.baseUrl}/account/?name=${user.name}&senha=${user.password}`, {headers: headers})
             .toPromise()
             .then(resp => {
                 console.log(resp.json().data);
@@ -39,7 +39,7 @@ export class AccountService {
     logout(): any {
         const account: UserAccount = JSON.parse(localStorage.getItem('account')) || {token: null};
         const headers = new Headers(this.headers);
-        headers.append('Authorization', account.token);
+        headers.append('Authorization', account.senha);
         return this.http.get(`${this.baseUrl}/logout`, {headers: headers})
             .toPromise()
             .then(resp => {

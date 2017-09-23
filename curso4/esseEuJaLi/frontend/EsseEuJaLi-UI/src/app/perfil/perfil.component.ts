@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { LivroService } from '../service/livro.service';
 import { Observable } from 'rxjs/Observable';
+import { UserAccount } from '../model/user-account';
+import { Livro } from '../model/livro';
 
 @Component({
   selector: 'app-perfil',
@@ -16,8 +18,9 @@ export class PerfilComponent implements OnInit {
 
   ngOnInit() {
     this.service.getPontosUsuario().then(usuarioPontos => {
+      const account: UserAccount = JSON.parse(localStorage.getItem('account'));
       this.datasource = new ListDataSource(usuarioPontos.pontos.map(ponto => {
-        return {valor: ponto.valor, categoria: ponto.categoria, trofeus: this.getTrofeus(ponto)};
+        return {valor: ponto.valor, categoria: ponto.categoria, trofeus: this.getTrofeus2(ponto.categoria, account['livros'])};
       }));
     })
   }
@@ -26,6 +29,10 @@ export class PerfilComponent implements OnInit {
     return ponto.valor >= 5 ? 'Leitor de ' + ponto.categoria + ' (' + Math.floor(ponto.valor / 5) + ')' : null;
   }
 
+  private getTrofeus2(categoria: string, livros: Livro[]) {
+    const qtdLivro = livros.filter(livro => livro.categoria === categoria).length;
+    return qtdLivro >= 5 ? 'Leitor de ' + categoria + ' (' + Math.floor(qtdLivro / 5) + ')' : null;
+  }
 }
 
 export class ListDataSource extends DataSource<{valor: number, categoria: string, trofeus: string}> {

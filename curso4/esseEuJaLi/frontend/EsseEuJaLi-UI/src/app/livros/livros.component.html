@@ -4,14 +4,15 @@
       <a [routerLink]="['/home/livros', livro.id]">
         <md-card>
           <md-card-header>
-            <md-card-title><h3>{{livro.titulo}}</h3></md-card-title>
+            <md-card-title>
+              <h3>{{livro.titulo}}<md-icon *ngIf="livro.lido" style="float: right;">check</md-icon></h3>
+
+            </md-card-title>
+            <md-card-subtitle>{{livro.subTitulo}}</md-card-subtitle>
           </md-card-header>
           <md-card-content>
-            {{livro.subTitulo}}
+            {{livro.categoria}}
           </md-card-content>
-          <md-card-actions>
-            <md-checkbox [(ngModel)]="livro.lido" disabled></md-checkbox>
-          </md-card-actions>
         </md-card>
       </a>
     </md-grid-tile>

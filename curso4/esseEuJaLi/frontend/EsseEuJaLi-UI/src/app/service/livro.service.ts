@@ -19,7 +19,7 @@ export class LivroService {
   getLivros(): Promise<Livro[]> {
     const account: UserAccount = JSON.parse(localStorage.getItem('account')) || {token: null};
     const headers = new Headers(this.headers);
-    headers.append('Authorization', account.token);
+    headers.append('Authorization', account.senha);
     return this.http.get(`${this.baseUrl}/livros`, {headers: headers})
         .toPromise()
         .then(resp => {
@@ -31,7 +31,7 @@ export class LivroService {
   getLivrosUsuario(): Promise<UsuarioLivro> {
     const account: UserAccount = JSON.parse(localStorage.getItem('account')) || {token: null};
     const headers = new Headers(this.headers);
-    headers.append('Authorization', account.token);
+    headers.append('Authorization', account.senha);
     return this.http.get(`${this.baseUrl}/usuarioLivro/${account.id}`, {headers: headers})
       .toPromise()
       .then(resp => {
@@ -47,9 +47,9 @@ export class LivroService {
   updateLivrosUsuario(livro: Livro): Promise<UsuarioLivro>  {
     const account: UserAccount = JSON.parse(localStorage.getItem('account')) || {token: null};
     const headers = new Headers(this.headers);
-    headers.append('Authorization', account.token);
+    headers.append('Authorization', account.senha);
 
-    account['livros'].push(livro.id);
+    account['livros'].push(livro);
     const usuarioLivro: UsuarioLivro = {id: account.id, livros: account['livros']};
     localStorage.setItem('account', JSON.stringify(account));
 
@@ -62,7 +62,7 @@ export class LivroService {
   getPontosUsuarios(): Promise<UsuarioPonto[]> {
     const account: UserAccount = JSON.parse(localStorage.getItem('account')) || {token: null};
     const headers = new Headers(this.headers);
-    headers.append('Authorization', account.token);
+    headers.append('Authorization', account.senha);
     return this.http.get(`${this.baseUrl}/usuarioPonto`, {headers: headers})
         .toPromise()
         .then(resp => {
@@ -74,7 +74,7 @@ export class LivroService {
   getPontosUsuario(): Promise<UsuarioPonto> {
     const account: UserAccount = JSON.parse(localStorage.getItem('account')) || {token: null};
     const headers = new Headers(this.headers);
-    headers.append('Authorization', account.token);
+    headers.append('Authorization', account.senha);
     return this.http.get(`${this.baseUrl}/usuarioPonto/${account.id}`, {headers: headers})
       .toPromise()
       .then(resp => {
@@ -87,7 +87,7 @@ export class LivroService {
 
     const account: UserAccount = JSON.parse(localStorage.getItem('account')) || {token: null};
     const headers = new Headers(this.headers);
-    headers.append('Authorization', account.token);
+    headers.append('Authorization', account.senha);
 
     return this.http.get(`${this.baseUrl}/usuarioPonto/${account.id}`, {headers: headers})
       .toPromise()
